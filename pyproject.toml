@@ -1,0 +1,71 @@
+[project]
+name = "learning-analytics"
+version = "0.1.0"
+description = "Prédiction du risque d'échec étudiant avec Machine Learning"
+readme = "README.md" 
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Houssam Ibnchakroune", email = "h.ibnchakroune@gmail.com"}
+]
+keywords = ["machine-learning", "education", "learning-analytics", "student-performance"]
+
+# Dépendances de production
+dependencies = [
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+    "scikit-learn>=1.4.0",
+    "xgboost>=2.0.3",
+    "imbalanced-learn>=0.12.0",
+    "sqlalchemy>=2.0.25",
+    "pymysql>=1.1.0",
+    "psycopg2-binary>=2.9.9",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "jupyter>=1.0.0",
+    "ipykernel>=6.25.0",
+]
+
+# Dépendances optionnelles pour développement
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "ipython>=8.0.0",
+]
+
+# URLs du projet
+[project.urls]
+Homepage = "https://github.com/Houssam-Ibnchakroune/Learning-Analytics"
+Repository = "https://github.com/Houssam-Ibnchakroune/Learning-Analytics"
+Issues = "https://github.com/Houssam-Ibnchakroune/Learning-Analytics"
+
+# Configuration du système de build
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# Configuration de Black (formatteur de code Python)
+[tool.black]
+line-length = 88
+target-version = ['py312', 'py311']
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | venv
+  | __pycache__
+  | build
+  | dist
+  | data
+  | models
+)/
+'''
+
+# Configuration de pytest (tests unitaires)
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"

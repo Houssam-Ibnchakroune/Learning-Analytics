@@ -1,1 +1,8 @@
 venv/
+.logs/
+.idea/
+__pycache__/
+*.pyc
+learning_analytics.egg-info/
+open+university+learning+analytics+dataset/
+open+university+learning+analytics+dataset.zip
