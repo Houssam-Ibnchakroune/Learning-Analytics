@@ -2,8 +2,8 @@
 name = "learning-analytics"
 version = "0.1.0"
 description = "Prédiction du risque d'échec étudiant avec Machine Learning"
-readme = "README.md" 
-requires-python = ">=3.10"
+readme = "README.md"
+requires-python = ">=3.12"
 license = {text = "MIT"}
 authors = [
     {name = "Houssam Ibnchakroune", email = "h.ibnchakroune@gmail.com"}
@@ -49,7 +49,7 @@ build-backend = "setuptools.build_meta"
 # Configuration de Black (formatteur de code Python)
 [tool.black]
 line-length = 88
-target-version = ['py312', 'py311']
+target-version = ['py312']
 exclude = '''
 /(
     \.git
