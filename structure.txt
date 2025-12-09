@@ -1,0 +1,71 @@
+prj_TD/  (Learning-Analytics)
+│
+├── data/                          # 📊 Données
+│   ├── raw/                       # Données brutes (CSV, SQL dumps)
+│   │   ├── moodle_logs.csv
+│   │   ├── student_info.csv
+│   │   └── assessments.csv
+│   │
+│   ├── processed/                 # Données nettoyées
+│   │   ├── cleaned_data.csv
+│   │   └── features.csv
+│   │
+│   └── external/                  # Datasets publics (OULAD, Kaggle)
+│       └── oulad_dataset/
+│
+├── notebooks/                     # 📓 Jupyter Notebooks
+│   ├── 01_exploration.ipynb      # Analyse exploratoire (EDA)
+│   ├── 02_data_preparation.ipynb # Nettoyage + features
+│   ├── 03_modeling.ipynb         # Entraînement modèles ML
+│   └── 04_evaluation.ipynb       # Évaluation + résultats
+│
+├── src/                          # 🐍 Code Python source
+│   ├── __init__.py
+│   │
+│   ├── data/                     # Pipeline données
+│   │   ├── __init__.py
+│   │   ├── extract.py           # Extraction (DB/CSV)
+│   │   ├── transform.py         # Nettoyage
+│   │   └── load.py              # Chargement
+│   │
+│   ├── features/                # Feature engineering
+│   │   ├── __init__.py
+│   │   ├── student_features.py  # Features étudiants
+│   │   ├── activity_features.py # Features activités
+│   │   └── engagement_features.py # Features engagement
+│   │
+│   ├── models/                  # Modèles ML
+│   │   ├── __init__.py
+│   │   ├── train.py            # Entraînement
+│   │   ├── predict.py          # Prédiction
+│   │   └── evaluate.py         # Évaluation
+│   │
+│   └── visualization/           # Visualisations
+│       ├── __init__.py
+│       ├── plots.py            # Graphiques Python
+│       └── export_powerbi.py   # Export pour Power BI
+│
+├── models/                      # 🤖 Modèles sauvegardés
+│   ├── random_forest_v1.pkl
+│   ├── xgboost_v1.pkl
+│   └── scaler.pkl
+│
+├── reports/                     # 📊 Rapports & dashboards
+│   ├── figures/                # Graphiques générés
+│   ├── powerbi/               # Fichiers Power BI
+│   │   └── dashboard.pbix
+│   └── rapport_final.pdf
+│
+├── config/                      # ⚙️ Configuration
+│   ├── config.yaml            # Paramètres généraux
+│   └── database.yaml          # Config DB (si connexion réelle)
+│
+├── tests/                       # 🧪 Tests unitaires
+│   ├── test_data.py
+│   ├── test_features.py
+│   └── test_models.py
+│
+├── .gitignore                   # Git ignore
+├── README.md                    # Documentation projet
+├── requirement.txt              # Dépendances Python
+└── venv/                        # Environnement virtuel
