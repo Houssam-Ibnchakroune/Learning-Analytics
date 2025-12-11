@@ -1,6 +1,6 @@
-# 🚀 Guide d'Installation - OULAD Learning Analytics
+# Guide d'Installation - OULAD Learning Analytics
 
-## 📋 Prérequis
+##  Prérequis
 
 - Python 3.8 ou supérieur
 - PostgreSQL 12 ou supérieur
@@ -8,7 +8,7 @@
 
 ---
 
-## 1️⃣ Installation de PostgreSQL
+## Installation de PostgreSQL
 
 ### Windows
 
@@ -36,7 +36,7 @@ docker run --name postgres-oulad -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d p
 
 ---
 
-## 2️⃣ Installation du Projet Python
+##  Installation du Projet Python
 
 ### Cloner le projet
 
@@ -63,7 +63,7 @@ pip install -r requirements.txt
 
 ---
 
-## 3️⃣ Configuration de la Base de Données
+##  Configuration de la Base de Données
 
 ### Créer le fichier .env
 
@@ -81,7 +81,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=oulad_db
 DB_USER=postgres
-DB_PASSWORD=VOTRE_MOT_DE_PASSE_ICI  # ⚠️ Changez ceci !
+DB_PASSWORD=VOTRE_MOT_DE_PASSE_ICI  #  Changez ceci !
 ```
 
 ### Exécuter le script de configuration
@@ -91,23 +91,23 @@ python setup_database.py
 ```
 
 **Ce script va :**
-- ✅ Créer la base de données `oulad_db`
-- ✅ Créer toutes les tables nécessaires
-- ✅ Créer les index pour les performances
-- ✅ Vérifier que tout est configuré correctement
+-  Créer la base de données `oulad_db`
+-  Créer toutes les tables nécessaires
+-  Créer les index pour les performances
+-  Vérifier que tout est configuré correctement
 
 **Sortie attendue :**
 ```
 ============================================================
   CONFIGURATION DE LA BASE DE DONNÉES OULAD
 ============================================================
-🔧 Création de la base de données...
+ Création de la base de données...
 
-✅ Base de données 'oulad_db' créée avec succès!
+ Base de données 'oulad_db' créée avec succès!
 
-🔧 Création des tables...
+ Création des tables...
 
-✅ Tables créées avec succès:
+ Tables créées avec succès:
    - students_prepared
    - ml_features
    - predictions
@@ -115,13 +115,13 @@ python setup_database.py
    - model_metrics
    - student_interventions
 
-🔧 Création des index...
+ Création des index...
 
-✅ Index créés avec succès
+ Index créés avec succès
 
-🔍 Vérification de la configuration...
+ Vérification de la configuration...
 
-📊 Tables trouvées dans 'oulad_db':
+ Tables trouvées dans 'oulad_db':
    - ml_features                      (0 lignes)
    - model_metadata                   (0 lignes)
    - model_metrics                    (0 lignes)
@@ -130,13 +130,13 @@ python setup_database.py
    - students_prepared                (0 lignes)
 
 ============================================================
-  ✅ CONFIGURATION TERMINÉE AVEC SUCCÈS!
+   CONFIGURATION TERMINÉE AVEC SUCCÈS!
 ============================================================
 ```
 
 ---
 
-## 4️⃣ Vérification de l'Installation
+##  Vérification de l'Installation
 
 ### Test de connexion PostgreSQL
 
@@ -146,7 +146,7 @@ python -m src.data.load
 
 **Sortie attendue :**
 ```
-✅ Connexion PostgreSQL réussie!
+ Connexion PostgreSQL réussie!
    Version: PostgreSQL 14.x ...
 ```
 
@@ -165,7 +165,7 @@ python -c "from src.features.build_features import engineer_features; print('✅
 
 ---
 
-## 5️⃣ Télécharger les Données OULAD
+##  Télécharger les Données OULAD
 
 ### Télécharger le dataset
 
@@ -189,7 +189,7 @@ data/
 
 ---
 
-## 6️⃣ Exécuter le Pipeline Complet
+##  Exécuter le Pipeline Complet
 
 ```powershell
 # À venir : pipeline.py orchestrera tout le processus
@@ -198,7 +198,7 @@ python pipeline.py
 
 ---
 
-## 🚨 Dépannage
+##  Dépannage
 
 ### Erreur: "psycopg2 installation failed"
 
@@ -240,7 +240,7 @@ GRANT ALL PRIVILEGES ON DATABASE oulad_db TO postgres;
 
 ---
 
-## 📦 Structure du Projet
+##  Structure du Projet
 
 ```
 prj_TD/
@@ -269,7 +269,7 @@ prj_TD/
 
 ---
 
-## ✅ Checklist d'Installation
+##  Checklist d'Installation
 
 - [ ] PostgreSQL installé et démarré
 - [ ] Python 3.8+ installé
@@ -282,14 +282,6 @@ prj_TD/
 
 ---
 
-## 🎯 Prochaines Étapes
 
-1. ✅ Installation terminée
-2. 📊 Exécuter le pipeline ETL
-3. 🤖 Entraîner le modèle ML
-4. 📈 Connecter Power BI
-5. 🚀 Déployer en production
 
 ---
-
-**Besoin d'aide ? Consultez la documentation complète dans `docs/`**
