@@ -2,7 +2,7 @@
 Module de chargement des données vers PostgreSQL
 Sauvegarde les DataFrames dans la base de données PostgreSQL
 """
-
+import logging
 import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine, text
@@ -11,7 +11,7 @@ from config.config import HOST,USER ,PW, DB, PORT
 import os
 from datetime import datetime
 
-
+logger = logging.getLogger(__name__)
 
 def load_db_config() -> Dict[str, str]:
     """
@@ -39,6 +39,7 @@ def load_db_config() -> Dict[str, str]:
             'password': PW
         }
     except KeyError as e:
+        logger.error(f"Variable d'environnement manquante: {e}")
         raise ValueError(f"Variable d'environnement manquante: {e}")
         
     return config
@@ -89,6 +90,7 @@ def create_connection_string(host: Optional[str] = None,
     ...     use_env=False
     ... )
     """
+    logger.debug("Creating PostgreSQL connection string")
     if use_env:
         config = load_db_config()
         host = config['host']
@@ -105,7 +107,10 @@ def create_connection_string(host: Optional[str] = None,
         password = password or ''
         
         if not password:
+            logger.error("Mot de passe requis si use_env=False")
             raise ValueError("Mot de passe requis!")
+    
+    logger.info("PostgreSQL connection string created")
     
     return f"postgresql://{user}:{password}@{host}:{port}/{database}"
 
@@ -141,6 +146,7 @@ def save_to_postgres(df: pd.DataFrame,
     ... )
     >>> save_to_postgres(df, 'students', conn_str)
     """
+    logger.debug(f"Saving DataFrame to PostgreSQL table '{table_name}'")
     try:
         engine = create_engine(connection_string)
         
@@ -154,12 +160,12 @@ def save_to_postgres(df: pd.DataFrame,
             chunksize=1000
         )
         
-        print(f"Table '{table_name}' sauvegardée: {df.shape[0]} lignes")
+        logger.info(f"Table '{table_name}' sauvegardée: {df.shape[0]} lignes")
         
         engine.dispose()
         
     except Exception as e:
-        print(f"Erreur lors de la sauvegarde de '{table_name}': {e}")
+        logger.error(f"Erreur lors de la sauvegarde de '{table_name}': {e}")
         raise
 
 
@@ -184,12 +190,14 @@ def save_features_to_postgres(X: np.ndarray,
     table_name : str
         Nom de la table
     """
+    logger.debug(f"Saving features to PostgreSQL table '{table_name}'")
     # Créer un DataFrame à partir de X et y
     df = pd.DataFrame(X, columns=column_names)
     df['target'] = y
     
     # Sauvegarder
     save_to_postgres(df, table_name, connection_string)
+    logger.info(f"Features sauvegardées dans la table '{table_name}'")
 
 
 def save_predictions_to_postgres(predictions: pd.DataFrame,
@@ -208,6 +216,7 @@ def save_predictions_to_postgres(predictions: pd.DataFrame,
     table_name : str
         Nom de la table
     """
+    logger.debug(f"Saving predictions to PostgreSQL table '{table_name}'")
     # Ajouter un timestamp
     predictions['prediction_date'] = datetime.now()
     
@@ -218,6 +227,7 @@ def save_predictions_to_postgres(predictions: pd.DataFrame,
         connection_string,
         if_exists='append'  # Ajouter aux prédictions existantes
     )
+    logger.info(f"Prédictions sauvegardées dans la table '{table_name}'")
 
 
 def save_model_metadata_to_postgres(metadata: Dict,
@@ -235,6 +245,7 @@ def save_model_metadata_to_postgres(metadata: Dict,
     table_name : str
         Nom de la table
     """
+    logger.debug(f"Saving model metadata to PostgreSQL table '{table_name}'")
     # Convertir le dictionnaire en DataFrame
     df = pd.DataFrame([metadata])
     
@@ -248,6 +259,7 @@ def save_model_metadata_to_postgres(metadata: Dict,
         connection_string,
         if_exists='append'
     )
+    logger.info(f"Métadonnées du modèle sauvegardées dans la table '{table_name}'")
 
 
 def save_csv_backup(df: pd.DataFrame,
@@ -265,13 +277,14 @@ def save_csv_backup(df: pd.DataFrame,
     index : bool
         Inclure l'index
     """
+    logger.debug(f"Saving DataFrame backup to CSV at '{output_path}'")
     try:
         df.to_csv(output_path, index=index, encoding='utf-8')
-        print(f"Backup CSV créé: {output_path}")
-        print(f"   - Dimensions: {df.shape}")
+        logger.info(f"Backup CSV créé: {output_path}")
+        logger.info(f"   - Dimensions: {df.shape}")
         
     except Exception as e:
-        print(f"Erreur lors de la sauvegarde CSV: {e}")
+        logger.error(f"Erreur lors de la sauvegarde CSV: {e}")
         raise
 
 
@@ -295,6 +308,7 @@ def load_from_postgres(table_name: str,
     pd.DataFrame
         DataFrame chargé depuis PostgreSQL
     """
+    logger.debug(f"Loading data from PostgreSQL table '{table_name}'")
     try:
         engine = create_engine(connection_string)
         
@@ -303,14 +317,15 @@ def load_from_postgres(table_name: str,
         
         df = pd.read_sql(query, engine)
         
-        print(f"Table '{table_name}' chargée: {df.shape[0]} lignes")
+        logger.info(f"Table '{table_name}' chargée: {df.shape[0]} lignes")
         
         engine.dispose()
+        logger.info(f"DataFrame chargé depuis la table '{table_name}'")
         
         return df
         
     except Exception as e:
-        print(f"Erreur lors du chargement de '{table_name}': {e}")
+        logger.error(f"Erreur lors du chargement de '{table_name}': {e}")
         raise
 
 
@@ -328,50 +343,51 @@ def test_connection(connection_string: str) -> bool:
     bool
         True si la connexion réussit
     """
+    logger.debug("Testing PostgreSQL connection")
     try:
         engine = create_engine(connection_string)
         with engine.connect() as conn:
             result = conn.execute(text("SELECT version();"))
             version = result.fetchone()[0]
-            print(f"Connexion PostgreSQL réussie!")
-            print(f"   Version: {version}")
+            logger.info(f"Connexion PostgreSQL réussie!")
+            logger.info(f"   Version: {version}")
         engine.dispose()
         return True
         
     except Exception as e:
-        print(f"Erreur de connexion PostgreSQL: {e}")
+        logger.error(f"Erreur de connexion PostgreSQL: {e}")
         return False
 
 
 if __name__ == "__main__":
     # Test du module
-    print("Test du module load.py\n")
+    logger.info("Test du module load.py\n")
     
-    print("Configuration recommandée:")
-    print("   1. Installez python-dotenv: pip install python-dotenv")
-    print("   2. Copiez .env.example vers .env")
-    print("   3. Remplissez .env avec vos identifiants PostgreSQL")
-    print("   4. Créez la base de données: CREATE DATABASE oulad_db;\n")
+    logger.info("Configuration recommandée:")
+    logger.info("   1. Installez python-dotenv: pip install python-dotenv")
+    logger.info("   2. Copiez .env.example vers .env")
+    logger.info("   3. Remplissez .env avec vos identifiants PostgreSQL")
+    logger.info("   4. Créez la base de données: CREATE DATABASE oulad_db;\n")
     
     try:
         # Test avec .env
-        print("Test de chargement depuis .env...")
+        logger.info("Test de chargement depuis .env...")
         conn_str = create_connection_string()
-        print(f"Chaîne de connexion créée avec succès")
+        logger.info("Chaîne de connexion créée avec succès")
         
         # Test de connexion (décommentez si PostgreSQL est installé)
         test_connection(conn_str)
         
     except ValueError as e:
-        print(f"\n  {e}")
-        print("\nExemple de fichier .env:")
-        print("   DB_HOST=localhost")
-        print("   DB_PORT=5432")
-        print("   DB_NAME=oulad_db")
-        print("   DB_USER=postgres")
-        print("   DB_PASSWORD=votre_mot_de_passe")
+        logger.error(f"\n  {e}")
+        logger.error("\nExemple de fichier .env:")
+        logger.error("   DB_HOST=localhost")
+        logger.error("   DB_PORT=5432")
+        logger.error("   DB_NAME=oulad_db")
+        logger.error("   DB_USER=postgres")
+        logger.error("   DB_PASSWORD=votre_mot_de_passe")
     
     except Exception as e:
-        print(f"\nErreur: {e}")
+        logger.error(f"\nErreur: {e}")
     
-    print("\nModule load.py prêt à l'emploi!")
+    logger.info("\nModule load.py prêt à l'emploi!")
