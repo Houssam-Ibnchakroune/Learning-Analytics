@@ -2,7 +2,7 @@
 Module de feature engineering pour OULAD
 Encode les variables catégorielles et gère la colinéarité
 """
-
+import logging
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
@@ -11,6 +11,7 @@ from scipy.cluster import hierarchy
 from collections import defaultdict
 from typing import Tuple, Dict
 
+logger = logging.getLogger(__name__)
 
 def create_Xy(final_df: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray, pd.Index, Dict]:
     """
@@ -105,7 +106,7 @@ def handle_collinearity(X: np.ndarray,
     >>> print(f"Features avant: {X.shape[1]}, après: {X_filtered.shape[1]}")
     Features avant: 18, après: 15
     """
-    print(f"🔧 Gestion de la colinéarité...")
+    print(f"Gestion de la colinéarité...")
     print(f"   - Features initiales: {X.shape[1]}")
     
     # Calculer la corrélation de Spearman
@@ -153,22 +154,25 @@ def engineer_features(final_df: pd.DataFrame,
         - column_names : noms des features (liste)
         - encode_dict : dictionnaire d'encodage
     """
-    print(f"🔧 Feature Engineering...")
-    
+    logger.info(f"Feature Engineering...")
+    logger.debug("   - Données entrantes: %d lignes, %d colonnes", final_df.shape[0], final_df.shape[1])
+
     # Créer X et y
     X, y, column_names, encode_dict = create_Xy(final_df)
-    print(f"✅ Features créées: X{X.shape}, y{y.shape}")
+    logger.info(f"Features créées: X{X.shape}, y{y.shape}")
+    logger.debug("   - Colonnes: %s", list(column_names[:5]) + ['...'])
     
     # Gérer la colinéarité si demandé
     if handle_collinear:
+        logger.debug("   - Gestion de la colinéarité activée")
         X, column_names = handle_collinearity(X, column_names)
     
     # Convertir column_names en liste
     column_names = column_names.tolist()
     
-    print(f"✅ Feature engineering terminé!")
-    print(f"   - Features finales: {len(column_names)}")
-    print(f"   - Exemples: {column_names[:5]}")
+    logger.info(f"Feature engineering terminé!")
+    logger.info(f"   - Features finales: {len(column_names)}")
+    logger.info(f"   - Exemples: {column_names[:5]}")
     
     return X, y, column_names, encode_dict
 
@@ -196,7 +200,7 @@ def save_features(X: np.ndarray,
     """
     import os
     import json
-    
+    logger.info(f"Sauvegarde des features dans {output_dir}...")
     os.makedirs(output_dir, exist_ok=True)
     
     # Sauvegarder X et y
@@ -220,10 +224,10 @@ def save_features(X: np.ndarray,
     with open(os.path.join(output_dir, 'features_metadata.json'), 'w') as f:
         json.dump(metadata, f, indent=2)
     
-    print(f"✅ Features sauvegardées dans {output_dir}")
-    print(f"   - X_features.npy: {X.shape}")
-    print(f"   - y_labels.npy: {y.shape}")
-    print(f"   - features_metadata.json")
+    logger.info(f"Features sauvegardées dans {output_dir}")
+    logger.info(f"   - X_features.npy: {X.shape}")
+    logger.info(f"   - y_labels.npy: {y.shape}")
+    logger.info(f"   - features_metadata.json")
 
 
 def load_features(input_dir: str = '../data/processed/') -> Tuple[np.ndarray, np.ndarray, list, Dict]:
@@ -252,9 +256,9 @@ def load_features(input_dir: str = '../data/processed/') -> Tuple[np.ndarray, np
     column_names = metadata['column_names']
     encode_dict = metadata['encode_dict']
     
-    print(f"✅ Features chargées depuis {input_dir}")
-    print(f"   - X: {X.shape}")
-    print(f"   - y: {y.shape}")
+    logger.info(f"Features chargées depuis {input_dir}")
+    logger.info(f"   - X: {X.shape}")
+    logger.info(f"   - y: {y.shape}")
     
     return X, y, column_names, encode_dict
 
@@ -264,28 +268,28 @@ if __name__ == "__main__":
     from src.data.extract import load_oulad_data
     from src.data.transform import prepare_dataset
     
-    print("🔍 Test du module build_features.py\n")
+    logger.info("Test du module build_features.py\n")
     
     try:
         # Charger et préparer les données
-        print("1. Chargement des données...")
+        logger.info("1. Chargement des données...")
         data = load_oulad_data()
         
-        print("\n2. Préparation du dataset...")
+        logger.info("2. Préparation du dataset...")
         final_df = prepare_dataset(data)
         
-        print("\n3. Feature engineering...")
+        logger.info("3. Feature engineering...")
         X, y, column_names, encode_dict = engineer_features(final_df)
         
-        print("\n4. Sauvegarde des features...")
+        logger.info("4. Sauvegarde des features...")
         save_features(X, y, column_names, encode_dict)
         
-        print("\n5. Test de chargement...")
+        logger.info("5. Test de chargement...")
         X_loaded, y_loaded, cols_loaded, enc_loaded = load_features()
         
-        print("\n✅ Module build_features.py fonctionne correctement!")
+        logger.info("Module build_features.py fonctionne correctement!")
         
     except Exception as e:
-        print(f"\n❌ Erreur: {e}")
+        logger.error(f"\nErreur: {e}")
         import traceback
         traceback.print_exc()
