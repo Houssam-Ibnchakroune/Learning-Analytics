@@ -280,8 +280,4 @@ prj_TD/
 - [ ] Données OULAD téléchargées et extraites
 - [ ] Tests de connexion réussis
 
----
 
-
-
----
