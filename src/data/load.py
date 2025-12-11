@@ -7,36 +7,106 @@ import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine, text
 from typing import Optional, Dict
-import json
+from config.config import HOST,USER ,PW, DB, PORT
+import os
 from datetime import datetime
 
 
-def create_connection_string(host: str = 'localhost',
-                             port: int = 5432,
-                             database: str = 'oulad_db',
-                             user: str = 'postgres',
-                             password: str = 'postgres') -> str:
+
+def load_db_config() -> Dict[str, str]:
+    """
+    Charge la configuration de la base de données depuis les variables d'environnement.
+    
+    Essaie d'abord de charger depuis un fichier .env avec python-dotenv,
+    sinon utilise les variables d'environnement système.
+    
+    Returns:
+    --------
+    Dict[str, str]
+        Dictionnaire contenant les paramètres de connexion
+        
+    Raises:
+    -------
+    ValueError
+        Si les variables d'environnement requises ne sont pas définies
+    """
+    try:
+        config = {
+            'host': HOST,
+            'port': PORT,
+            'database': DB,
+            'user': USER,
+            'password': PW
+        }
+    except KeyError as e:
+        raise ValueError(f"Variable d'environnement manquante: {e}")
+        
+    return config
+
+
+def create_connection_string(host: Optional[str] = None,
+                             port: Optional[int] = None,
+                             database: Optional[str] = None,
+                             user: Optional[str] = None,
+                             password: Optional[str] = None,
+                             use_env: bool = True) -> str:
     """
     Crée une chaîne de connexion PostgreSQL.
     
+    Si use_env=True (par défaut), charge la config depuis les variables d'environnement.
+    Sinon, utilise les paramètres fournis.
+    
     Parameters:
     -----------
-    host : str
+    host : Optional[str]
         Hôte de la base de données
-    port : int
+    port : Optional[int]
         Port PostgreSQL
-    database : str
+    database : Optional[str]
         Nom de la base de données
-    user : str
+    user : Optional[str]
         Nom d'utilisateur
-    password : str
+    password : Optional[str]
         Mot de passe
+    use_env : bool
+        Utiliser les variables d'environnement (recommandé)
         
     Returns:
     --------
     str
         Chaîne de connexion SQLAlchemy
+        
+    Example:
+    --------
+    >>> # Recommandé: utiliser .env
+    >>> conn_str = create_connection_string()
+    
+    >>> # Alternative: spécifier manuellement (non recommandé pour production)
+    >>> conn_str = create_connection_string(
+    ...     host='localhost',
+    ...     user='postgres',
+    ...     password='secret',
+    ...     use_env=False
+    ... )
     """
+    if use_env:
+        config = load_db_config()
+        host = config['host']
+        port = config['port']
+        database = config['database']
+        user = config['user']
+        password = config['password']
+    else:
+        # Valeurs par défaut si non spécifiées
+        host = host or 'localhost'
+        port = port or 5432
+        database = database or 'oulad_db'
+        user = user or 'postgres'
+        password = password or ''
+        
+        if not password:
+            raise ValueError("Mot de passe requis!")
+    
     return f"postgresql://{user}:{password}@{host}:{port}/{database}"
 
 
@@ -84,12 +154,12 @@ def save_to_postgres(df: pd.DataFrame,
             chunksize=1000
         )
         
-        print(f"✅ Table '{table_name}' sauvegardée: {df.shape[0]} lignes")
+        print(f"Table '{table_name}' sauvegardée: {df.shape[0]} lignes")
         
         engine.dispose()
         
     except Exception as e:
-        print(f"❌ Erreur lors de la sauvegarde de '{table_name}': {e}")
+        print(f"Erreur lors de la sauvegarde de '{table_name}': {e}")
         raise
 
 
@@ -197,11 +267,11 @@ def save_csv_backup(df: pd.DataFrame,
     """
     try:
         df.to_csv(output_path, index=index, encoding='utf-8')
-        print(f"✅ Backup CSV créé: {output_path}")
+        print(f"Backup CSV créé: {output_path}")
         print(f"   - Dimensions: {df.shape}")
         
     except Exception as e:
-        print(f"❌ Erreur lors de la sauvegarde CSV: {e}")
+        print(f"Erreur lors de la sauvegarde CSV: {e}")
         raise
 
 
@@ -233,14 +303,14 @@ def load_from_postgres(table_name: str,
         
         df = pd.read_sql(query, engine)
         
-        print(f"✅ Table '{table_name}' chargée: {df.shape[0]} lignes")
+        print(f"Table '{table_name}' chargée: {df.shape[0]} lignes")
         
         engine.dispose()
         
         return df
         
     except Exception as e:
-        print(f"❌ Erreur lors du chargement de '{table_name}': {e}")
+        print(f"Erreur lors du chargement de '{table_name}': {e}")
         raise
 
 
@@ -263,37 +333,45 @@ def test_connection(connection_string: str) -> bool:
         with engine.connect() as conn:
             result = conn.execute(text("SELECT version();"))
             version = result.fetchone()[0]
-            print(f"✅ Connexion PostgreSQL réussie!")
+            print(f"Connexion PostgreSQL réussie!")
             print(f"   Version: {version}")
         engine.dispose()
         return True
         
     except Exception as e:
-        print(f"❌ Erreur de connexion PostgreSQL: {e}")
+        print(f"Erreur de connexion PostgreSQL: {e}")
         return False
 
 
 if __name__ == "__main__":
     # Test du module
-    print("🔍 Test du module load.py\n")
+    print("Test du module load.py\n")
     
-    # Configuration de test
-    conn_str = create_connection_string(
-        host='localhost',
-        database='oulad_db',
-        user='postgres',
-        password='postgres'
-    )
+    print("Configuration recommandée:")
+    print("   1. Installez python-dotenv: pip install python-dotenv")
+    print("   2. Copiez .env.example vers .env")
+    print("   3. Remplissez .env avec vos identifiants PostgreSQL")
+    print("   4. Créez la base de données: CREATE DATABASE oulad_db;\n")
     
-    print(f"🔗 Chaîne de connexion créée")
-    print(f"   (Remplacez les paramètres par vos identifiants réels)")
+    try:
+        # Test avec .env
+        print("Test de chargement depuis .env...")
+        conn_str = create_connection_string()
+        print(f"Chaîne de connexion créée avec succès")
+        
+        # Test de connexion (décommentez si PostgreSQL est installé)
+        test_connection(conn_str)
+        
+    except ValueError as e:
+        print(f"\n  {e}")
+        print("\nExemple de fichier .env:")
+        print("   DB_HOST=localhost")
+        print("   DB_PORT=5432")
+        print("   DB_NAME=oulad_db")
+        print("   DB_USER=postgres")
+        print("   DB_PASSWORD=votre_mot_de_passe")
     
-    # Test de connexion (commenté car nécessite PostgreSQL installé)
-    # test_connection(conn_str)
+    except Exception as e:
+        print(f"\nErreur: {e}")
     
-    print("\n💡 Pour utiliser ce module:")
-    print("   1. Installez PostgreSQL")
-    print("   2. Créez une base de données: CREATE DATABASE oulad_db;")
-    print("   3. Utilisez save_to_postgres() pour sauvegarder vos données")
-    
-    print("\n✅ Module load.py prêt à l'emploi!")
+    print("\nModule load.py prêt à l'emploi!")

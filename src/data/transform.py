@@ -254,21 +254,21 @@ def prepare_dataset(data_dicts: Dict[str, pd.DataFrame],
     pd.DataFrame
         DataFrame final préparé
     """
-    print(f"🔧 Préparation du dataset...")
+    print(f"Préparation du dataset...")
     print(f"   - Score deadline: {score_deadline} jours")
     print(f"   - Click deadline: {click_deadline} jours")
     print(f"   - Withdraw deadline: {withdraw_deadline} jours")
     
     # Créer les DataFrames intermédiaires
     score_df = create_score_df(data_dicts, score_deadline)
-    print(f"✅ Score DataFrame créé: {score_df.shape}")
+    print(f"Score DataFrame créé: {score_df.shape}")
     
     click_df = create_click_df(data_dicts, click_deadline)
-    print(f"✅ Click DataFrame créé: {click_df.shape}")
+    print(f"Click DataFrame créé: {click_df.shape}")
     
     # Créer le DataFrame final
     final_df = create_final_df(data_dicts, score_df, click_df, withdraw_deadline)
-    print(f"✅ Final DataFrame créé: {final_df.shape}")
+    print(f"Final DataFrame créé: {final_df.shape}")
     
     return final_df
 
@@ -277,7 +277,7 @@ if __name__ == "__main__":
     # Test du module
     from extract import load_oulad_data
     
-    print("🔍 Test du module transform.py\n")
+    print("Test du module transform.py\n")
     
     try:
         # Charger les données
@@ -286,10 +286,10 @@ if __name__ == "__main__":
         # Préparer le dataset
         final_df = prepare_dataset(data)
         
-        print(f"\n📊 Dataset final:")
+        print(f"\nDataset final:")
         print(f"   - Dimensions: {final_df.shape}")
         print(f"   - Colonnes: {list(final_df.columns)}")
-        print(f"\n✅ Module transform.py fonctionne correctement!")
+        print(f"\nModule transform.py fonctionne correctement!")
         
     except Exception as e:
-        print(f"\n❌ Erreur: {e}")
+        print(f"\nErreur: {e}")

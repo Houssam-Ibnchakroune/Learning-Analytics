@@ -49,10 +49,10 @@ def load_oulad_data(data_path: str = '../data/raw/open+university+learning+analy
         except UnicodeDecodeError:
             # Si échec, utiliser latin-1 (ISO-8859-1)
             data_dicts[file_key] = pd.read_csv(file_path, encoding='latin-1')
-            print(f"⚠️  {csv_name} chargé avec encoding latin-1")
+            print(f"{csv_name} chargé avec encoding latin-1")
     
-    print(f"✅ {len(data_dicts)} fichiers CSV chargés")
-    print(f"📁 Fichiers: {list(data_dicts.keys())}")
+    print(f"{len(data_dicts)} fichiers CSV chargés")
+    print(f"Fichiers: {list(data_dicts.keys())}")
     
     return data_dicts
 
@@ -66,7 +66,7 @@ def get_dataset_info(data_dicts: Dict[str, pd.DataFrame]) -> None:
     data_dicts : Dict[str, pd.DataFrame]
         Dictionnaire de DataFrames OULAD
     """
-    print("\n📊 Informations sur les datasets:")
+    print("\nInformations sur les datasets:")
     print("-" * 60)
     
     for name, df in data_dicts.items():
@@ -79,13 +79,13 @@ def get_dataset_info(data_dicts: Dict[str, pd.DataFrame]) -> None:
 
 if __name__ == "__main__":
     # Test du module
-    print("🔍 Test du module extract.py\n")
+    print("Test du module extract.py\n")
     
     try:
         data = load_oulad_data()
         get_dataset_info(data)
         
-        print("\n✅ Module extract.py fonctionne correctement!")
+        print("\nModule extract.py fonctionne correctement!")
         
     except Exception as e:
-        print(f"\n❌ Erreur: {e}")
+        print(f"\nErreur: {e}")
