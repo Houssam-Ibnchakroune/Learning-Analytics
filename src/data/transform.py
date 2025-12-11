@@ -6,7 +6,8 @@ Nettoie, merge et prépare les données pour le feature engineering
 import pandas as pd
 import numpy as np
 from typing import Dict, Tuple
-
+import logging
+logger = logging.getLogger(__name__)
 
 def inner_merge(left_df: pd.DataFrame, 
                 right_df: pd.DataFrame, 
@@ -254,21 +255,24 @@ def prepare_dataset(data_dicts: Dict[str, pd.DataFrame],
     pd.DataFrame
         DataFrame final préparé
     """
-    print(f"Préparation du dataset...")
-    print(f"   - Score deadline: {score_deadline} jours")
-    print(f"   - Click deadline: {click_deadline} jours")
-    print(f"   - Withdraw deadline: {withdraw_deadline} jours")
+    logger.info(f"Préparation du dataset...")
+    logger.info(f"   - Score deadline: {score_deadline} jours")
+    logger.info(f"   - Click deadline: {click_deadline} jours")
+    logger.info(f"   - Withdraw deadline: {withdraw_deadline} jours")
     
     # Créer les DataFrames intermédiaires
+    logger.debug("Creating intermediate DataFrames")
     score_df = create_score_df(data_dicts, score_deadline)
-    print(f"Score DataFrame créé: {score_df.shape}")
+    logger.info(f"Score DataFrame créé: {score_df.shape}")
     
+    logger.debug("Creating click DataFrame")
     click_df = create_click_df(data_dicts, click_deadline)
-    print(f"Click DataFrame créé: {click_df.shape}")
+    logger.info(f"Click DataFrame créé: {click_df.shape}")
     
     # Créer le DataFrame final
+    logger.debug("Creating final DataFrame")
     final_df = create_final_df(data_dicts, score_df, click_df, withdraw_deadline)
-    print(f"Final DataFrame créé: {final_df.shape}")
+    logger.info(f"Final DataFrame créé: {final_df.shape}")
     
     return final_df
 
@@ -277,7 +281,7 @@ if __name__ == "__main__":
     # Test du module
     from extract import load_oulad_data
     
-    print("Test du module transform.py\n")
+    logger.info("Test du module transform.py\n")
     
     try:
         # Charger les données
@@ -286,10 +290,10 @@ if __name__ == "__main__":
         # Préparer le dataset
         final_df = prepare_dataset(data)
         
-        print(f"\nDataset final:")
-        print(f"   - Dimensions: {final_df.shape}")
-        print(f"   - Colonnes: {list(final_df.columns)}")
-        print(f"\nModule transform.py fonctionne correctement!")
+        logger.info(f"\nDataset final:")
+        logger.info(f"   - Dimensions: {final_df.shape}")
+        logger.info(f"   - Colonnes: {list(final_df.columns)}")
+        logger.info(f"\nModule transform.py fonctionne correctement!")
         
     except Exception as e:
-        print(f"\nErreur: {e}")
+        logger.error(f"\nErreur: {e}")
