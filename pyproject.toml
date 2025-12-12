@@ -48,6 +48,11 @@ Issues = "https://github.com/Houssam-Ibnchakroune/Learning-Analytics"
 requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
+# Configuration de setuptools pour trouver les packages
+[tool.setuptools.packages.find]
+where = ["."]  # Chercher depuis la racine
+include = ["src*", "config*", "utils*"]  # Inclure src, config et utils
+
 # Configuration de Black (formatteur de code Python)
 [tool.black]
 line-length = 88
