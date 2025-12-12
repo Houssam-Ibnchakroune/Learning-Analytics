@@ -110,7 +110,7 @@ def predict_batch(model, data_path, output_path=None):
     # Sauvegarder si chemin fourni
     if output_path:
         results_df.to_csv(output_path, index=False)
-        print(f"✅ Prédictions sauvegardées : {output_path}")
+        print(f"Prédictions sauvegardées : {output_path}")
     
     return results_df
 
