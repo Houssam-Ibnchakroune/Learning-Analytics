@@ -133,6 +133,25 @@ def classify_risk_level(risk_score):
         return 'Élevé'
 
 
+def categorize_risk(risk_scores):
+    """
+    Catégorise un array de scores de risque.
+    
+    Args:
+        risk_scores: Array numpy avec scores de risque (0-1)
+        
+    Returns:
+        categories: Array numpy avec catégories ('Faible', 'Moyen', 'Élevé')
+    """
+    categories = np.empty(len(risk_scores), dtype=object)
+    
+    categories[risk_scores < 0.3] = 'Faible'
+    categories[(risk_scores >= 0.3) & (risk_scores < 0.7)] = 'Moyen'
+    categories[risk_scores >= 0.7] = 'Élevé'
+    
+    return categories
+
+
 # Exemple d'utilisation
 if __name__ == "__main__":
     import sys
