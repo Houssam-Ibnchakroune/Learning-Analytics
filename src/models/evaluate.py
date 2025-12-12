@@ -37,7 +37,7 @@ def evaluate_classification(y_true, y_pred, class_names=None):
     
     # Affichage
     print("=" * 50)
-    print("📊 MÉTRIQUES D'ÉVALUATION")
+    print("MÉTRIQUES D'ÉVALUATION")
     print("=" * 50)
     print(f"Accuracy:  {metrics['accuracy']:.4f}")
     print(f"Precision: {metrics['precision']:.4f}")
@@ -46,7 +46,7 @@ def evaluate_classification(y_true, y_pred, class_names=None):
     print("=" * 50)
     
     # Rapport de classification détaillé
-    print("\n📋 Rapport de classification détaillé :")
+    print("\nRapport de classification détaillé :")
     print(classification_report(y_true, y_pred, target_names=class_names))
     
     return metrics
@@ -77,7 +77,7 @@ def plot_confusion_matrix(y_true, y_pred, save_path=None, class_names=None):
     
     if save_path:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"✅ Matrice de confusion sauvegardée : {save_path}")
+        print(f"Matrice de confusion sauvegardée : {save_path}")
     
     plt.show()
     
@@ -116,7 +116,7 @@ def plot_roc_curve(y_true, y_proba, save_path=None):
     
     if save_path:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"✅ Courbe ROC sauvegardée : {save_path}")
+        print(f"Courbe ROC sauvegardée : {save_path}")
     
     plt.show()
     
@@ -175,7 +175,7 @@ def plot_feature_importance(importance_df, top_n=15, save_path=None):
     
     if save_path:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"✅ Feature importance sauvegardée : {save_path}")
+        print(f"Feature importance sauvegardée : {save_path}")
     
     plt.show()
 
@@ -225,7 +225,7 @@ def evaluate_model_complete(model, X_test, y_test, y_proba=None,
         if save_dir:
             csv_path = f"{save_dir}/feature_importance.csv"
             importance_df.to_csv(csv_path, index=False)
-            print(f"✅ Feature importance CSV sauvegardée : {csv_path}")
+            print(f"Feature importance CSV sauvegardée : {csv_path}")
     
     return metrics
 
