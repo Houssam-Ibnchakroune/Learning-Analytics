@@ -181,7 +181,8 @@ def save_features(X: np.ndarray,
                  y: np.ndarray,
                  column_names: list,
                  encode_dict: Dict,
-                 output_dir: str = '../data/processed/') -> None:
+                 output_dir: str = '../data/processed/',
+                 prefix: str = '') -> None:
     """
     Sauvegarde les features et métadonnées.
     
@@ -204,8 +205,8 @@ def save_features(X: np.ndarray,
     os.makedirs(output_dir, exist_ok=True)
     
     # Sauvegarder X et y
-    np.save(os.path.join(output_dir, 'X_features.npy'), X)
-    np.save(os.path.join(output_dir, 'y_labels.npy'), y)
+    np.save(os.path.join(output_dir, f'X_features_{prefix}.npy'), X)
+    np.save(os.path.join(output_dir, f'y_labels_{prefix}.npy'), y)
     
     # Convertir les numpy arrays en listes pour JSON
     encode_dict_serializable = {
@@ -221,13 +222,13 @@ def save_features(X: np.ndarray,
         'n_features': int(X.shape[1])
     }
     
-    with open(os.path.join(output_dir, 'features_metadata.json'), 'w') as f:
+    with open(os.path.join(output_dir, f'features_metadata_{prefix}.json'), 'w') as f:
         json.dump(metadata, f, indent=2)
     
     logger.info(f"Features sauvegardées dans {output_dir}")
-    logger.info(f"   - X_features.npy: {X.shape}")
-    logger.info(f"   - y_labels.npy: {y.shape}")
-    logger.info(f"   - features_metadata.json")
+    logger.info(f"   - X_features_{prefix}.npy: {X.shape}")
+    logger.info(f"   - y_labels_{prefix}.npy: {y.shape}")
+    logger.info(f"   - features_metadata_{prefix}.json")
 
 
 def load_features(input_dir: str = '../data/processed/') -> Tuple[np.ndarray, np.ndarray, list, Dict]:
