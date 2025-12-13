@@ -1,13 +1,13 @@
-# 🔄 Guide du Pipeline Orchestrator
+# Guide du Pipeline Orchestrator
 
-## 📁 Emplacement
+## Emplacement
 ```
 src/pipeline/orchestrator.py
 ```
 
 ---
 
-## 🚀 Exécution
+## Exécution
 
 ### **MODE DÉVELOPPEMENT** (Recommandé pour tests)
 ```bash
@@ -19,10 +19,10 @@ python -m src.pipeline.orchestrator --mode dev --steps features train evaluate
 ```
 
 **Caractéristiques Dev:**
-- ✅ Échantillon réduit (5000 lignes)
-- ✅ CV rapide (3 folds)
-- ✅ Modèle léger (100 estimators)
-- ✅ Fichiers suffixés `_dev`
+- Échantillon réduit (5000 lignes)
+- CV rapide (3 folds)
+- Modèle léger (100 estimators)
+- Fichiers suffixés `_dev`
 
 ---
 
@@ -36,14 +36,14 @@ python -m src.pipeline.orchestrator --mode prod --steps train evaluate predict
 ```
 
 **Caractéristiques Prod:**
-- ✅ Toutes les données
-- ✅ CV robuste (5 folds)
-- ✅ Modèle optimisé (200 estimators)
-- ✅ Fichiers suffixés `_prod`
+- Toutes les données
+- CV robuste (5 folds)
+- Modèle optimisé (200 estimators)
+- Fichiers suffixés `_prod`
 
 ---
 
-## 📋 Étapes Disponibles
+## Étapes Disponibles
 
 | Étape | Description | Temps (dev) | Temps (prod) |
 |-------|-------------|-------------|--------------|
@@ -59,7 +59,7 @@ python -m src.pipeline.orchestrator --mode prod --steps train evaluate predict
 
 ---
 
-## 🎯 Cas d'Usage
+## Cas d'Usage
 
 ### **1. Premier lancement complet**
 ```bash
@@ -93,7 +93,7 @@ python -m src.pipeline.orchestrator --mode prod
 
 ---
 
-## 📁 Fichiers Générés
+## Fichiers Générés
 
 ### **Mode Dev:**
 ```
@@ -121,7 +121,7 @@ reports/
 
 ---
 
-## 🔧 Configuration Personnalisée
+## Configuration Personnalisée
 
 Modifier dans `orchestrator.py`:
 
@@ -149,39 +149,39 @@ def _get_default_config(self):
 
 ---
 
-## 📊 Exemple de Sortie
+## Exemple de Sortie
 
 ```
 ======================================================================
-🚀 PIPELINE ORCHESTRATOR - MODE: DEV
+PIPELINE ORCHESTRATOR - MODE: DEV
 ======================================================================
-📋 Étapes à exécuter: extract, transform, load, features, train, evaluate, predict
+Étapes à exécuter: extract, transform, load, features, train, evaluate, predict
 
-🔵 ÉTAPE 1/7: EXTRACTION DES DONNÉES
+ÉTAPE 1/7: EXTRACTION DES DONNÉES
 ----------------------------------------------------------------------
-✅ Extraction terminée en 4.23s
+Extraction terminée en 4.23s
 
-🔵 ÉTAPE 2/7: TRANSFORMATION DES DONNÉES
+ÉTAPE 2/7: TRANSFORMATION DES DONNÉES
 ----------------------------------------------------------------------
-✅ Transformation terminée en 8.15s
+Transformation terminée en 8.15s
 
 ...
 
 ======================================================================
-🎉 PIPELINE TERMINÉ AVEC SUCCÈS!
+PIPELINE TERMINÉ AVEC SUCCÈS!
 ======================================================================
-⏱️  Temps total: 127.45s (2.1 min)
+Temps total: 127.45s (2.1 min)
 
-📊 RÉSUMÉ PAR ÉTAPE:
-   ✅ EXTRACT: 4.23s
-   ✅ TRANSFORM: 8.15s
-   ✅ LOAD: 12.34s
-   ✅ FEATURES: 23.45s
-   ✅ TRAIN: 34.56s
-   ✅ EVALUATE: 15.67s
-   ✅ PREDICT: 6.78s
+RÉSUMÉ PAR ÉTAPE:
+   EXTRACT: 4.23s
+   TRANSFORM: 8.15s
+   LOAD: 12.34s
+   FEATURES: 23.45s
+   TRAIN: 34.56s
+   EVALUATE: 15.67s
+   PREDICT: 6.78s
 
-📁 FICHIERS GÉNÉRÉS:
+FICHIERS GÉNÉRÉS:
    • Modèle: models/random_forest_dev.pkl
    • Prédictions: reports/predictions_dev.csv
    • Évaluation: reports/figures_dev/
@@ -190,7 +190,7 @@ def _get_default_config(self):
 
 ---
 
-## 🐛 Dépannage
+## Dépannage
 
 ### **Erreur: Module not found**
 ```bash
@@ -216,7 +216,7 @@ ls data/processed/
 
 ---
 
-## ✅ Checklist avant Production
+## Checklist avant Production
 
 - [ ] Tester en mode `dev` d'abord
 - [ ] Vérifier `.env` avec credentials production
@@ -226,7 +226,7 @@ ls data/processed/
 
 ---
 
-## 🎓 Bonnes Pratiques
+## Bonnes Pratiques
 
 1. **Toujours tester en dev avant prod**
 2. **Versionner les modèles** (ajouter timestamp au nom)
@@ -236,4 +236,4 @@ ls data/processed/
 
 ---
 
-**Bon pipeline! 🚀**
+**Bon pipeline!**

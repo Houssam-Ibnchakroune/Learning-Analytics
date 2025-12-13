@@ -1,6 +1,6 @@
 # Guide d'Installation - OULAD Learning Analytics
 
-##  Prérequis
+## Prérequis
 
 - Python 3.8 ou supérieur
 - PostgreSQL 12 ou supérieur
@@ -36,7 +36,7 @@ docker run --name postgres-oulad -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d p
 
 ---
 
-##  Installation du Projet Python
+## Installation du Projet Python
 
 ### Cloner le projet
 
@@ -63,7 +63,7 @@ pip install -r requirements.txt
 
 ---
 
-##  Configuration de la Base de Données
+## Configuration de la Base de Données
 
 ### Créer le fichier .env
 
@@ -81,7 +81,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=oulad_db
 DB_USER=postgres
-DB_PASSWORD=VOTRE_MOT_DE_PASSE_ICI  #  Changez ceci !
+DB_PASSWORD=VOTRE_MOT_DE_PASSE_ICI  # Changez ceci !
 ```
 
 ### Exécuter le script de configuration
@@ -91,10 +91,10 @@ python setup_database.py
 ```
 
 **Ce script va :**
--  Créer la base de données `oulad_db`
--  Créer toutes les tables nécessaires
--  Créer les index pour les performances
--  Vérifier que tout est configuré correctement
+- Créer la base de données `oulad_db`
+- Créer toutes les tables nécessaires
+- Créer les index pour les performances
+- Vérifier que tout est configuré correctement
 
 **Sortie attendue :**
 ```
@@ -136,7 +136,7 @@ python setup_database.py
 
 ---
 
-##  Vérification de l'Installation
+## Vérification de l'Installation
 
 ### Test de connexion PostgreSQL
 
@@ -146,7 +146,7 @@ python -m src.data.load
 
 **Sortie attendue :**
 ```
- Connexion PostgreSQL réussie!
+Connexion PostgreSQL réussie!
    Version: PostgreSQL 14.x ...
 ```
 
@@ -154,18 +154,18 @@ python -m src.data.load
 
 ```powershell
 # Test extraction
-python -c "from src.data.extract import load_oulad_data; data = load_oulad_data('data/raw/open+university+learning+analytics+dataset/'); print('✅ Extract OK')"
+python -c "from src.data.extract import load_oulad_data; data = load_oulad_data('data/raw/open+university+learning+analytics+dataset/'); print('Extract OK')"
 
 # Test transformation
-python -c "from src.data.transform import prepare_dataset; print('✅ Transform OK')"
+python -c "from src.data.transform import prepare_dataset; print('Transform OK')"
 
 # Test features
-python -c "from src.features.build_features import engineer_features; print('✅ Features OK')"
+python -c "from src.features.build_features import engineer_features; print('Features OK')"
 ```
 
 ---
 
-##  Télécharger les Données OULAD
+## Télécharger les Données OULAD
 
 ### Télécharger le dataset
 
@@ -189,7 +189,7 @@ data/
 
 ---
 
-##  Exécuter le Pipeline Complet
+## Exécuter le Pipeline Complet
 
 ```powershell
 # À venir : pipeline.py orchestrera tout le processus
@@ -198,7 +198,7 @@ python pipeline.py
 
 ---
 
-##  Dépannage
+## Dépannage
 
 ### Erreur: "psycopg2 installation failed"
 
@@ -240,7 +240,7 @@ GRANT ALL PRIVILEGES ON DATABASE oulad_db TO postgres;
 
 ---
 
-##  Structure du Projet
+## Structure du Projet
 
 ```
 prj_TD/
@@ -269,7 +269,7 @@ prj_TD/
 
 ---
 
-##  Checklist d'Installation
+## Checklist d'Installation
 
 - [ ] PostgreSQL installé et démarré
 - [ ] Python 3.8+ installé
