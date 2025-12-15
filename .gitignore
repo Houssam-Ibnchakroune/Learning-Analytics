@@ -81,6 +81,7 @@ logs/
 reports/figures/*.png
 reports/*.html
 reports/*.pdf
+rapport/
 
 # ============================================
 # OS Files
