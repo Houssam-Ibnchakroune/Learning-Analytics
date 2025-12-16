@@ -1,11 +1,12 @@
 """
 Module pour l'évaluation des performances des modèles.
 """
-
+import logging
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+logger = logging.getLogger(__name__)
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
     confusion_matrix, classification_report, roc_curve, auc,
@@ -36,18 +37,18 @@ def evaluate_classification(y_true, y_pred, class_names=None):
     }
     
     # Affichage
-    print("=" * 50)
-    print("MÉTRIQUES D'ÉVALUATION")
-    print("=" * 50)
-    print(f"Accuracy:  {metrics['accuracy']:.4f}")
-    print(f"Precision: {metrics['precision']:.4f}")
-    print(f"Recall:    {metrics['recall']:.4f}")
-    print(f"F1-Score:  {metrics['f1_score']:.4f}")
-    print("=" * 50)
+    logger.info("=" * 50)
+    logger.info("MÉTRIQUES D'ÉVALUATION")
+    logger.info("=" * 50)
+    logger.info(f"Accuracy:  {metrics['accuracy']:.4f}")
+    logger.info(f"Precision: {metrics['precision']:.4f}")
+    logger.info(f"Recall:    {metrics['recall']:.4f}")
+    logger.info(f"F1-Score:  {metrics['f1_score']:.4f}")
+    logger.info("=" * 50)
     
     # Rapport de classification détaillé
-    print("\nRapport de classification détaillé :")
-    print(classification_report(y_true, y_pred, target_names=class_names))
+    logger.info("\nRapport de classification détaillé :")
+    logger.info(classification_report(y_true, y_pred, target_names=class_names))
     
     return metrics
 
@@ -77,7 +78,7 @@ def plot_confusion_matrix(y_true, y_pred, save_path=None, class_names=None):
     
     if save_path:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"Matrice de confusion sauvegardée : {save_path}")
+        logger.info(f"Matrice de confusion sauvegardée : {save_path}")
     
     plt.show()
     
@@ -116,7 +117,7 @@ def plot_roc_curve(y_true, y_proba, save_path=None):
     
     if save_path:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"Courbe ROC sauvegardée : {save_path}")
+        logger.info(f"Courbe ROC sauvegardée : {save_path}")
     
     plt.show()
     
@@ -144,11 +145,11 @@ def get_feature_importance(model, feature_names):
         'importance': importances
     }).sort_values('importance', ascending=False)
     
-    print("=" * 50)
-    print("🔝 TOP 10 FEATURES LES PLUS IMPORTANTES")
-    print("=" * 50)
-    print(importance_df.head(10).to_string(index=False))
-    print("=" * 50)
+    logger.info("=" * 50)
+    logger.info("🔝 TOP 10 FEATURES LES PLUS IMPORTANTES")
+    logger.info("=" * 50)
+    logger.info(importance_df.head(10).to_string(index=False))
+    logger.info("=" * 50)
     
     return importance_df
 
@@ -175,7 +176,7 @@ def plot_feature_importance(importance_df, top_n=15, save_path=None):
     
     if save_path:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"Feature importance sauvegardée : {save_path}")
+        logger.info(f"Feature importance sauvegardée : {save_path}")
     
     plt.show()
 
@@ -225,7 +226,7 @@ def evaluate_model_complete(model, X_test, y_test, y_proba=None,
         if save_dir:
             csv_path = f"{save_dir}/feature_importance.csv"
             importance_df.to_csv(csv_path, index=False)
-            print(f"Feature importance CSV sauvegardée : {csv_path}")
+            logger.info(f"Feature importance CSV sauvegardée : {csv_path}")
     
     return metrics
 
@@ -247,4 +248,4 @@ if __name__ == "__main__":
     #     save_dir='../reports/figures'
     # )
     
-    print("Module evaluate.py prêt à l'emploi !")
+    logger.info("Module evaluate.py prêt à l'emploi !")
