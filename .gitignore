@@ -82,7 +82,7 @@ reports/figures/*.png
 reports/*.html
 reports/*.pdf
 rapport/
-
+rapport.pdf
 # ============================================
 # OS Files
 # ============================================
