@@ -1,6 +1,6 @@
 {
     "model_type": "RandomForestClassifier",
-    "n_estimators": 100,
+    "n_estimators": 200,
     "max_features": "sqrt",
     "min_samples_split": 10,
     "n_features": 26,
@@ -32,6 +32,6 @@
         "disability",
         "mean_score_day180"
     ],
-    "training_date": "2025-12-16 15:11:11",
+    "training_date": "2025-12-16 15:51:23",
     "training_samples": 23860
 }
