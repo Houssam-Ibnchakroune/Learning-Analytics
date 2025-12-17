@@ -364,8 +364,8 @@ class PipelineOrchestrator:
         
         # Charger modèle et données
         model = load_model(self.paths['model'])
-        X_test = np.load(self.paths['features'])[:1000]  # Échantillon
-        y_test = np.load(self.paths['labels'])[:1000]
+        X_test = np.load(self.paths['features'])  # Dataset complet
+        y_test = np.load(self.paths['labels'])
         
         # Charger feature names
         with open(self.paths['metadata'], 'r') as f:
